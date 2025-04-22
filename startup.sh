@@ -1,10 +1,11 @@
 #!/bin/sh
+if [ "$TESTING" = "False" ]; then
+    echo "Waiting for PostgreSQL..."
+    ./docker/wait-for-it.sh postgres:5432 --timeout=30 --strict -- echo "PostgreSQL is up"
 
-echo "Waiting for PostgreSQL..."
-./docker/wait-for-it.sh postgres:5432 --timeout=30 --strict -- echo "PostgreSQL is up"
-
-echo "Starting Django app..."
-exec "$@"
+    echo "Starting Django app..."
+    exec "$@"
+fi
 
 # Start application setup
 echo "Running migrations..."
@@ -22,7 +23,7 @@ if [ "$TESTING" = "True" ]; then
         if [ "$WAIT" = "True" ]; then
             python -m debugpy --listen 0.0.0.0:5678 --wait-for-client -m pytest "$TEST_APP" -v
         else
-            pytest "$TEST_APP" -v --cov="$TEST_APP" --cov-report=html
+            pytest "$TEST_APP" -v --cov="$TEST_APP"
         fi
     else
         # Run tests on the entire project if TEST_APP is not set
