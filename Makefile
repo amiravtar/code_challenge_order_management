@@ -30,3 +30,7 @@ lint:format isort check-imports
 .PHONY: format
 format:
 	ruff format
+.PHONY:get-uid
+get-uid:
+	@echo UID=$$UID
+	@echo GID=$$GID

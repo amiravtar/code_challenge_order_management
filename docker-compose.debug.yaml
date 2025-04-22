@@ -28,6 +28,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    #this makes the running user id on the container match the host user, saves some headache in file permission manageing
+    #only needed in development
+    user: "${UID:-0}:${GID:-0}"
 
   nginx:
     build:
