@@ -22,6 +22,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/v1/", include("api.v1.urls")),
 ]
 
 if settings.DEBUG and not settings.TESTING:
@@ -29,4 +30,5 @@ if settings.DEBUG and not settings.TESTING:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     if settings.DEBUG_TOOLBAR:
         from debug_toolbar.toolbar import debug_toolbar_urls
+
         urlpatterns += debug_toolbar_urls()

@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "accounts",
+    "api",
     "rest_framework",
     "corsheaders",
     # has to be at the end
@@ -123,3 +125,4 @@ STATIC_ROOT = BASE_DIR / "static_root"
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media_root"
+AUTH_USER_MODEL = "accounts.User"
