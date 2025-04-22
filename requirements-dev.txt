@@ -1,0 +1,8 @@
+-r requirements.txt
+ruff
+debugpy
+ipython
+django-debug-toolbar==5.1.0
+pytest_django==4.11.1
+pytest_cov==6.1.1
+pytest-xdist==3.6.1

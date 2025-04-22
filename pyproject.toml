@@ -1,0 +1,7 @@
+[tool.djlint]
+ignore="H013,H006,H030,H021,H031,H019,T001"
+profile="django"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+addopts="--log-disable=django.db.backends.schema"
