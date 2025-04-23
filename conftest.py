@@ -1,28 +1,56 @@
 # ruff: noqa: S106,S101,S105,PTH123
 import pytest
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group, Permission
 from rest_framework.test import APIClient
 
 from accounts.models import User
 
+UserModel = get_user_model()
+
 
 @pytest.fixture
-def api_client_with_permissions(user_with_permissions, request) -> APIClient:
-    """Fixture for an API client authenticated with a user that has permissions."""
-    client = APIClient()
+def admin_group(db):
+    group, _ = Group.objects.get_or_create(name="admin")
+    perms = Permission.objects.filter(
+        codename__in=["edit_all_orders", "view_all_orders", "delete_all_orders"]
+    )
+    group.permissions.set(perms)
+    return group
 
-    # Pass the parameter to the user_with_permissions fixture
-    user_with_permissions = request.getfixturevalue("user_with_permissions")
-    client.force_authenticate(user=user_with_permissions)
+
+@pytest.fixture
+def normal_user_group(db):
+    group, _ = Group.objects.get_or_create(name="normal_user")
+    # No custom permissions added — uses object-level access.
+    return group
+
+
+@pytest.fixture
+def admin_user(admin_group) -> User:
+    user = User.objects.create_user(username="admin", password="adminpass")
+    user.groups.add(admin_group)
+    return user
+
+
+@pytest.fixture
+def normal_user(normal_user_group) -> User:
+    user = User.objects.create_user(username="normal", password="userpass")
+    user.groups.add(normal_user_group)
+    return user
+
+
+@pytest.fixture
+def api_client_admin(admin_user):
+    client = APIClient()
+    client.force_authenticate(user=admin_user)
     return client
 
 
 @pytest.fixture
-def api_client_without_permissions(user_without_permissions, request) -> APIClient:
-    """Fixture for an API client authenticated with a user that has no permissions."""
+def api_client_user(normal_user):
     client = APIClient()
-
-    # Pass the parameter to the user_with_permissions fixture
-    client.force_authenticate(user=user_without_permissions)
+    client.force_authenticate(user=normal_user)
     return client
 
 
