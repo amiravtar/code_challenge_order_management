@@ -46,9 +46,7 @@ class TestOrderUpdate:
         response = api_client_without_login.put(url, data, format="json")
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_order_update_non_owner(
-        self, api_client_user, order3_instance_admin
-    ):
+    def test_order_update_non_owner(self, api_client_user, order3_instance_admin):
         """Test that a normal user cannot update an order that doesn't belong to them"""
         # Ensure the other user's order is different
         url = reverse("api_v1:order_update", kwargs={"pk": order3_instance_admin.pk})

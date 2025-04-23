@@ -1,4 +1,3 @@
-
 from .base import BASE_DIR
 
 LOGGING_LEVEL = "DEBUG"
