@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator
 NAME_VALIDATOR = RegexValidator(
     regex=r'^(?!.*[<>"\'\\\/]).+$',
     message="در نام از کاراکتر های \\ / <> \" ' استفاده نکنید",
-    code="invalid_name"
+    code="invalid_name",
 )
 USERNAME_VALIDATOR = RegexValidator(
     regex=r"^[a-zA-Z0-9_]+$",

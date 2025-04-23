@@ -26,6 +26,9 @@ exclude = [
     "node_modules",
     "site-packages",
     "venv",
+    "*/migrations/*.py",
+    "*/migrations/*.pyc",
+    "*/__pycache__/*",
 ]
 
 # Same as Black.
