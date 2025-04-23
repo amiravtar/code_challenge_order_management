@@ -3,6 +3,8 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from utils.validators import NAME_VALIDATOR
+
 
 class Order(models.Model):
     user = models.ForeignKey(
@@ -19,6 +21,7 @@ class Order(models.Model):
             "blank": "نام سفارش نمی‌تواند خالی باشد.",
             "max_length": "نام سفارش نباید بیشتر از ۲۵۵ کاراکتر باشد.",
         },
+        validators=[NAME_VALIDATOR],
     )
 
     count = models.PositiveIntegerField(
@@ -29,9 +32,7 @@ class Order(models.Model):
         },
     )
 
-    total_price = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
+    total_price = models.IntegerField(
         verbose_name="قیمت کل",
         error_messages={
             "blank": "قیمت کل نمی‌تواند خالی باشد.",
