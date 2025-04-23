@@ -11,6 +11,9 @@ fi
 echo "Running migrations..."
 python3 manage.py migrate
 
+echo "Loading defualt groups..."
+python3 manage.py load_default_groups
+
 # Check if a env variable called WORKERS exists
 if [ -n "$WORKERS" ]; then
     WORKERS=$WORKERS
