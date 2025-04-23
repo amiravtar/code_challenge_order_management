@@ -26,7 +26,7 @@ if [ "$TESTING" = "True" ]; then
         if [ "$WAIT" = "True" ]; then
             python -m debugpy --listen 0.0.0.0:5678 --wait-for-client -m pytest "$TEST_APP" -v
         else
-            pytest "$TEST_APP" -v --cov="$TEST_APP"
+            pytest "$TEST_APP" -v
         fi
     else
         # Run tests on the entire project if TEST_APP is not set

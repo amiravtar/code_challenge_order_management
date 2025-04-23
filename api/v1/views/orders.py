@@ -26,7 +26,7 @@ class OrderListView(ListAPIView):
     def get_queryset(self):  # type: ignore
         # user exist becuse of is_authenticated defualt permission
         user = self.request.user
-        if user.has_perm("view_all_orders"):  # type: ignore
+        if user.has_perm("orders.view_all_orders"):  # type: ignore
             return Order.objects.all()
         return Order.objects.filter(user=user)
 
