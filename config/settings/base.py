@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "orders",
     "api",
     "rest_framework",
+    "django_filters",
     "corsheaders",
     "drf_yasg",
 ]

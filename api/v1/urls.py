@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from api.v1.views.orders import OrderCreateView
+from api.v1.views.orders import OrderCreateView, OrderListView
 
 # Note: because the number of end points is not high, we are not seperating urls into seperate files, for the time being.
 # We can seperate them into diffrent files like views
@@ -15,4 +15,5 @@ urlpatterns = [
     path(
         "orders/create", OrderCreateView.as_view(), name="order_create"
     ),  # Create Order
+    path("orders/", OrderListView.as_view(), name="order_list"),
 ]

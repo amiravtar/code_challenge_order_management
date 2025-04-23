@@ -52,7 +52,6 @@ class Order(models.Model):
             ("view_all_orders", "دسترسی مشاهده همه سفارش‌ها"),
             ("edit_all_orders", "دسترسی ویرایش همه سفارش‌ها"),
             ("delete_all_orders", "دسترسی حذف همه سفارش‌ها"),
-            ("filter_all_orders", "دسترسی فیلتر کردن سفارش‌ها"),
         ]
 
     def __str__(self):
