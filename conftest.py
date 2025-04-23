@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group, Permission
 from rest_framework.test import APIClient
 
 from accounts.models import User
+from orders.models import Order
 
 UserModel = get_user_model()
 
@@ -68,4 +69,25 @@ def user_instance(db, django_user_model) -> tuple[User, str]:
             username="testuser", password="password123"
         ),
         "password123",
+    )
+
+
+@pytest.fixture
+def order1_instance(db, normal_user) -> Order:
+    return Order.objects.create(
+        name="Order A", count=2, total_price=100, user=normal_user
+    )
+
+
+@pytest.fixture
+def order2_instance(db, normal_user) -> Order:
+    return Order.objects.create(
+        name="Order B", count=2, total_price=250, user=normal_user
+    )
+
+
+@pytest.fixture
+def order3_instance_admin(db, admin_user) -> Order:
+    return Order.objects.create(
+        name="Order C", count=2, total_price=300, user=admin_user
     )
