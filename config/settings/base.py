@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     "api",
     "rest_framework",
     "corsheaders",
-    # has to be at the end
-    # 'django_cleanup.apps.CleanupConfig',
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
