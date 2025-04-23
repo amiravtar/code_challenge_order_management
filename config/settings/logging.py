@@ -1,4 +1,3 @@
-import pathlib
 
 from .base import BASE_DIR
 

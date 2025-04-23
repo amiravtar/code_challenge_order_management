@@ -1,16 +1,9 @@
-import pathlib
-import uuid
 
-from django.conf import settings
 from django.contrib.auth.models import (
     AbstractUser,
     BaseUserManager,
 )
-from django.contrib.auth.models import (
-    Group as django_group,  # noqa: N813
-)
 from django.db import models
-from django.db.models.fields.files import ImageFieldFile
 
 from utils.validators import NAME_VALIDATOR, USERNAME_VALIDATOR
 
