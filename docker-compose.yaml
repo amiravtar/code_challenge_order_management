@@ -1,0 +1,70 @@
+services:
+  postgres:
+    build: ./docker/postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistent volume for PostgreSQL
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  django-app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: [ "./startup.sh" ]
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    volumes:
+      - vms_logs:/app/logs
+      - vms_media_root:/app/media_root
+      - vms_static_root:/app/static_root
+    depends_on:
+      postgres:
+        condition: service_healthy
+    #this makes the running user id on the container match the host user, saves some headache in file permission manageing
+    #only needed in development
+    user: "${UID:-0}:${GID:-0}"
+
+  nginx:
+    build:
+      context: ./docker/nginx/
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_PORT:-80}:80"
+    volumes:
+      - vms_static_root:/usr/share/nginx/html/static
+      - vms_media_root:/usr/share/nginx/html/media
+    depends_on:
+      - django-app
+  test:
+    build:
+      context: .
+      # TODO: Use production docker file for this, Update: Need to creat ea seperate docker file for it, we need pytest deps, think on it later
+      dockerfile: ./Dockerfile.debug
+    command: [ "./startup.sh" ]
+    ports:
+      # - 8000:8000
+      - ${DEBUG_PORT:-5678}:5678
+    env_file:
+      - ${ENV_FILE:-.env}
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=False
+      - TESTING=True
+      - DATABASE_URL=sqlite:///sqlite.db
+    profiles:
+      - test
+networks:
+  default:
+    name: order_management
+volumes:
+  postgres_data:
+  vms_static_root:
+  vms_media_root:
+  vms_logs:

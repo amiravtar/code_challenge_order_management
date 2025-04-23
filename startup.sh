@@ -14,6 +14,9 @@ python3 manage.py migrate
 echo "Loading defualt groups..."
 python3 manage.py load_default_groups
 
+echo "Loading defualt users..."
+python3 manage.py load_default_users
+
 # Check if a env variable called WORKERS exists
 if [ -n "$WORKERS" ]; then
     WORKERS=$WORKERS
@@ -60,7 +63,6 @@ if [ "$DEBUG" = "True" ]; then
 else
     # Run Gunicorn normally
     exec gunicorn config.wsgi:application \
-        --config config/gunicorn_config.py \
         --bind 0.0.0.0:8000 \
         --workers $WORKERS
 fi
