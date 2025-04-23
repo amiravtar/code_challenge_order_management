@@ -1,11 +1,17 @@
 from django_filters import rest_framework as filters
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import permissions
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    DestroyAPIView,
+    ListAPIView,
+    UpdateAPIView,
+)
+from rest_framework.permissions import IsAuthenticated
 
 from orders.filters import OrderFilter
 from orders.models import Order
+from orders.permissions import IsOrderOwnerOrAdmin
 from orders.serializers import OrderSerializer
 
 
@@ -24,6 +30,7 @@ class OrderListView(ListAPIView):
     filterset_class = OrderFilter
 
     def get_queryset(self):  # type: ignore
+        # checking for owner or admin permission
         # user exist becuse of is_authenticated defualt permission
         user = self.request.user
         if user.has_perm("orders.view_all_orders"):  # type: ignore
@@ -68,3 +75,20 @@ class OrderListView(ListAPIView):
     )
     def get(self, *args, **kwargs):
         return super().get(*args, **kwargs)
+
+
+class OrderDeleteView(DestroyAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated, IsOrderOwnerOrAdmin]
+
+
+class OrderUpdateView(UpdateAPIView):
+    """
+    Edit an existing order.
+    Only the order owner or users with 'edit_all_orders' permission can edit.
+    """
+
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated, IsOrderOwnerOrAdmin]
