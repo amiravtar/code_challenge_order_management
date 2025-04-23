@@ -10,9 +10,13 @@ use the debug or prod docker compose files
 ```bash
 make create-secret-key # use this to create a djang random key, also you can use your own
 ```
+Note: Install the requirements first
+```bash
+pip install -r requirements-dev.txt
+```
 ## Docker
 
-#### File permissions for development
+#### File permissions for development (important)
 Use UID=1000 GID=1000 (use your own users ids) in env file to make the container user id same as the host
 #### Cors
 **Please** change the CORS_ALLOW_ALL_ORIGINS in the env file for prod (remove it or make it false), use CORS_ALLOWED_ORIGINS

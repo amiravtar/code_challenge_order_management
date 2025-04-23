@@ -13,7 +13,6 @@ services:
       timeout: 5s
       retries: 5
   django-app:
-    image: app-debug
     build:
       context: .
       dockerfile: ./Dockerfile.debug
@@ -25,6 +24,9 @@ services:
       - .env
     volumes:
       - .:/app
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      
     depends_on:
       postgres:
         condition: service_healthy
@@ -44,7 +46,6 @@ services:
     depends_on:
       - django-app
   test:
-    # image: vms-server-app-test
     build:
       context: .
       # TODO: Use production docker file for this, Update: Need to creat ea seperate docker file for it, we need pytest deps, think on it later
